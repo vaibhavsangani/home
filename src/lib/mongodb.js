@@ -25,9 +25,12 @@ async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      connectTimeoutMS: 10000, // 10 second timeout
     };
 
+    console.log('Connecting to MongoDB...');
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log('MongoDB Connected successfully');
       return mongoose;
     });
   }
@@ -35,8 +38,9 @@ async function dbConnect() {
   try {
     cached.conn = await cached.promise;
   } catch (e) {
+    console.error('MongoDB connection error:', e);
     cached.promise = null;
-    throw e;
+    throw new Error('Database connection failed: ' + e.message);
   }
 
   return cached.conn;
