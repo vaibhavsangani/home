@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "env": {
+    "MONGODB_URI": "mongodb+srv://Vaibhavsangani:Vaibhav05S@cluster0.w9fdw.mongodb.net/didaar?retryWrites=true&w=majority&appName=Cluster0"
+  }
+}
