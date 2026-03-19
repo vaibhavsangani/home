@@ -28,7 +28,7 @@ export default function AdminDashboard() {
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginForm, setLoginForm] = useState({ id: '', password: '' });
-  const [adminCredentials, setAdminCredentials] = useState({ adminId: 'admin', adminPassword: 'admin123' });
+  const [adminCredentials, setAdminCredentials] = useState({ adminId: 'vaibhav', adminPassword: '123456789' });
   const [securityForm, setSecurityForm] = useState({ adminId: '', adminPassword: '' });
   const [error, setError] = useState('');
 

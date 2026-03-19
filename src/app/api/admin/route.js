@@ -8,7 +8,7 @@ export async function GET() {
     let admin = await Admin.findOne({});
     if (!admin) {
       // Fallback for first-time setup
-      return NextResponse.json({ adminId: 'admin', adminPassword: 'admin123' });
+      return NextResponse.json({ adminId: 'vaibhav', adminPassword: '123456789' });
     }
     return NextResponse.json(admin);
   } catch (error) {
