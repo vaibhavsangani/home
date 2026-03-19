@@ -5,7 +5,25 @@ import { useEffect, useState } from 'react';
 import { getEvents } from '@/utils/eventStorage';
 import { getOrgData } from '@/utils/orgStorage';
 
+import { getRegistrations } from '@/utils/storage';
+import { getVendors } from '@/utils/vendorStorage';
+
 export default function Home() {
+  const [stats, setStats] = useState({ visitors: '15k+', vendors: '500+', cities: '50+', success: '98%' });
+
+  useEffect(() => {
+    const loadStats = async () => {
+      const regs = await getRegistrations();
+      const vndrs = await getVendors();
+      setStats({
+        visitors: regs.length > 0 ? `${regs.length}+` : '15k+',
+        vendors: vndrs.length > 0 ? `${vndrs.length}+` : '500+',
+        cities: '50+',
+        success: '98%'
+      });
+    };
+    loadStats();
+  }, []);
   const [attendees, setAttendees] = useState([]);
   const [events, setEvents] = useState([]);
   const [orgData, setOrgData] = useState(null);
@@ -86,10 +104,10 @@ export default function Home() {
         {/* Dynamic Stats Bar */}
         <div className="stats-bar">
           <div className="container stats-flex">
-            <div className="stat-item"><span className="stat-num">15k+</span><span className="stat-label">Visitors</span></div>
-            <div className="stat-item"><span className="stat-num">500+</span><span className="stat-label">Vendors</span></div>
-            <div className="stat-item"><span className="stat-num">50+</span><span className="stat-label">Cities</span></div>
-            <div className="stat-item"><span className="stat-num">98%</span><span className="stat-label">Success</span></div>
+            <div className="stat-item"><span className="stat-num">{stats.visitors}</span><span className="stat-label">Visitors</span></div>
+            <div className="stat-item"><span className="stat-num">{stats.vendors}</span><span className="stat-label">Vendors</span></div>
+            <div className="stat-item"><span className="stat-num">{stats.cities}</span><span className="stat-label">Cities</span></div>
+            <div className="stat-item"><span className="stat-num">{stats.success}</span><span className="stat-label">Success</span></div>
           </div>
         </div>
       </header>

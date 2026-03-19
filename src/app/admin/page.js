@@ -45,8 +45,10 @@ export default function AdminDashboard() {
   useEffect(() => {
     initializeStorage();
     const loadData = async () => {
-      setRegistrations(await getRegistrations());
-      setVendors(await getVendors());
+      const allRegs = await getRegistrations();
+      const allVendors = await getVendors();
+      setRegistrations(allRegs);
+      setVendors(allVendors);
       setOrgData(await getOrgData());
       setEvents(await getEvents());
       const adminData = await getAdminData();
@@ -72,58 +74,24 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Simulated Google Login
-    alert('Direct Google Login is currently in demonstration mode. Integration with Google Cloud Console is required for production.');
-    // Mock success for demo purposes if desired, or just leave as alert
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('adminAuth');
-  };
-
-  const handleEdit = (reg) => {
-    setEditingReg(reg.id);
-    setEditForm({ ...reg });
-  };
-
-  const handleSaveEdit = async () => {
-    const isVendor = editForm.role === 'vendor' || editForm.id.startsWith('VND-');
-    if (isVendor) {
-      if (await updateVendor(editingReg, editForm)) {
-        setVendors(await getVendors());
-        setEditingReg(null);
-        setEditForm(null);
-      }
-    } else {
-      if (await updateRegistration(editingReg, editForm)) {
-        setRegistrations(await getRegistrations());
-        setEditingReg(null);
-        setEditForm(null);
-      }
-    }
-  };
-
-  const handleDelete = async (id, isVendor = false) => {
-    if (confirm(`Are you sure you want to delete this ${isVendor ? 'vendor' : 'registration'}?`)) {
-      if (isVendor) {
-        if (await deleteVendor(id)) setVendors(await getVendors());
-      } else {
-        if (await deleteRegistration(id)) setRegistrations(await getRegistrations());
-      }
-    }
-  };
-
   const handleSaveEvent = async () => {
     setSavingEvent(true);
+    let success = false;
     if (editingEvent) {
-      await updateEventDetails(eventForm);
+      success = await updateEventDetails(eventForm);
     } else {
-      await addEvent(eventForm);
+      const res = await addEvent(eventForm);
+      success = !!res && !res.error;
     }
-    setEvents(await getEvents());
-    setIsEventModalOpen(false);
+    
+    if (success) {
+      const updatedEvents = await getEvents();
+      setEvents(updatedEvents);
+      setIsEventModalOpen(false);
+      alert(editingEvent ? 'Event updated!' : 'Event published successfully!');
+    } else {
+      alert('Failed to save event. Please check your data and try again.');
+    }
     setSavingEvent(false);
   };
 

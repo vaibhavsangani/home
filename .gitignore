@@ -35,3 +35,6 @@ next-env.d.ts
 # data backup
 /data/*.json
 node_modules
+
+.vercel
+.env*.local
