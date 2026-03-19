@@ -31,65 +31,65 @@ export default function Home() {
 
   return (
     <div className="home-wrapper">
-      <nav className="navbar container" style={{ position: 'fixed', top: '1.5rem', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '1200px', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(15px)', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', padding: '0.8rem 2rem', zIndex: 1000, boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-        <div className="logo" style={{ color: 'var(--color-brand-green)', fontWeight: '900', fontSize: '1.4rem', letterSpacing: '-0.5px' }}>Didaar Exhibition</div>
-        <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '2.5rem' }}>
-          <Link href="#about" style={{ fontSize: '0.9rem', fontWeight: '600', color: 'rgba(255,255,255,0.7)', transition: 'color 0.3s ease' }}>About</Link>
-          <Link href="#schedule" style={{ fontSize: '0.9rem', fontWeight: '600', color: 'rgba(255,255,255,0.7)', transition: 'color 0.3s ease' }}>Schedule</Link>
-          <Link href="/admin" title="Admin Access" style={{ opacity: 0.6, display: 'flex', alignItems: 'center', color: '#fff' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          </Link>
+      <nav className="navbar container" style={{ position: 'fixed', top: '2rem', left: '0', right: '0', display: 'flex', justifyContent: 'center', zIndex: 1000 }}>
+        <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', padding: '0.8rem 2.5rem', borderRadius: '100px', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '3rem', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+          <div className="logo" style={{ color: '#fff', fontWeight: '900', fontSize: '1.4rem', letterSpacing: '-0.8px' }}>DIDAAR <span style={{color: '#a855f7'}}>EXHIBITION</span></div>
+          <div className="nav-links" style={{ display: 'flex', gap: '2rem' }}>
+            <Link href="#about" className="nav-link">Organizers</Link>
+            <Link href="#attendees" className="nav-link">Network</Link>
+          </div>
         </div>
       </nav>
 
-      <header className="hero" style={{ height: '90vh', position: 'relative', background: 'url(/hero-bg.png) no-repeat center center/cover', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%)', zIndex: 1 }}></div>
+      <header className="hero-portal">
+        <div className="portal-overlay"></div>
         
-        <div className="container" style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '100px' }}>
-          <div className="animate-fade-in" style={{ maxWidth: '800px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', padding: '0.6rem 1.2rem', borderRadius: '50px', border: '1px solid rgba(255,255,255,0.2)', marginBottom: '2rem' }}>
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#00EA87', marginRight: '10px', boxShadow: '0 0 10px #00EA87' }}></span>
-              <span style={{ color: '#fff', fontSize: '0.9rem', fontWeight: '600' }}>Registrations Open 2026-27</span>
-            </div>
+        <div className="container hero-content">
+          <div className="header-text animate-fade-in">
+            <h1 className="hero-title">Unified <span className="text-gradient">Portal</span></h1>
+            <p className="hero-subtitle">The digital gateway to Didaar's elite exhibition ecosystem. Choose your entry point below.</p>
+          </div>
 
-            <h1 style={{ fontSize: 'clamp(3rem, 8vw, 5rem)', fontWeight: '900', lineHeight: '1.1', marginBottom: '1.5rem', color: '#fff' }}>
-              Welcome to <br />
-              <span style={{ color: '#00EA87' }}>Didaar Exhibition</span>
-            </h1>
+          <div className="portal-grid">
+            {/* Guest Portal */}
+            <Link href="/guest" className="portal-card guest-card animate-slide-up">
+              <div className="portal-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3 className="portal-name">Visitor Portal</h3>
+              <p className="portal-desc">Register as a guest, explore categories, and get your digital entry pass.</p>
+              <span className="portal-btn">Get Guest Pass →</span>
+            </Link>
 
-            <p style={{ fontSize: '1.4rem', color: 'rgba(255,255,255,0.9)', marginBottom: '3rem', maxWidth: '650px', lineHeight: '1.5' }}>
-              Smarter Event Management — Empowering Vendors, Visitors & Organizers with Unified Digital Exhibition Solutions.
-            </p>
+            {/* Exhibitor Portal */}
+            <Link href="/stall" className="portal-card exhibitor-card animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <div className="portal-icon purple-glow">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+              </div>
+              <h3 className="portal-name">Exhibitor Portal</h3>
+              <p className="portal-desc">Book your stall, upload documents, and manage your brand's presence.</p>
+              <span className="portal-btn purple-bg">Stall Registration →</span>
+            </Link>
 
-            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-              <Link href="/guest" className="btn btn-primary" style={{ padding: '1.2rem 2.5rem', fontSize: '1.1rem', background: '#007AFF', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 20px rgba(0,122,255,0.4)' }}>
-                Explore as Guest <span>→</span>
-              </Link>
-              <Link href="/stall" className="btn" style={{ padding: '1.2rem 2.5rem', fontSize: '1.1rem', borderRadius: '12px', border: '2px solid rgba(255,255,255,0.4)', color: '#fff' }}>
-                Book a Stall
-              </Link>
-            </div>
+            {/* Admin Portal */}
+            <Link href="/admin" className="portal-card admin-card animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <div className="portal-icon gold-glow">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+              </div>
+              <h3 className="portal-name">Admin Portal</h3>
+              <p className="portal-desc">Exclusive access for organizers to manage events, vendors, and analytics.</p>
+              <span className="portal-btn border-btn">Staff Login →</span>
+            </Link>
           </div>
         </div>
 
-        <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 3, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(20px)', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div className="container" style={{ display: 'flex', justifyContent: 'space-between', padding: '2rem 0', flexWrap: 'wrap', gap: '2rem' }}>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00EA87' }}>15,000+</div>
-              <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>Visitors Enrolled</div>
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00EA87' }}>500+</div>
-              <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>Local Vendors</div>
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00EA87' }}>50+</div>
-              <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>Exhibition Categories</div>
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#00EA87' }}>98%</div>
-              <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>Vendor Success Rate</div>
-            </div>
+        {/* Dynamic Stats Bar */}
+        <div className="stats-bar">
+          <div className="container stats-flex">
+            <div className="stat-item"><span className="stat-num">15k+</span><span className="stat-label">Visitors</span></div>
+            <div className="stat-item"><span className="stat-num">500+</span><span className="stat-label">Vendors</span></div>
+            <div className="stat-item"><span className="stat-num">50+</span><span className="stat-label">Cities</span></div>
+            <div className="stat-item"><span className="stat-num">98%</span><span className="stat-label">Success</span></div>
           </div>
         </div>
       </header>
@@ -276,140 +276,188 @@ export default function Home() {
 
       <style>{`
         .home-wrapper {
-          display: flex;
-          flex-direction: column;
           min-height: 100vh;
+          background: #020205;
+          color: #fff;
+          font-family: 'Inter', system-ui, sans-serif;
         }
 
-        .navbar {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 2rem;
-          padding-bottom: 2rem;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 10;
+        .nav-link {
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: rgba(255,255,255,0.6);
+          transition: all 0.3s ease;
         }
+        .nav-link:hover { color: #fff; transform: translateY(-1px); }
 
-        .logo {
-          font-size: 1.5rem;
-          font-weight: 800;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-        }
-
-        .nav-links {
-          display: flex;
-          gap: 2rem;
-        }
-
-        .nav-links a {
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: var(--color-text-primary);
-          transition: color 0.3s ease;
-        }
-        .nav-links a:hover {
-          color: var(--color-gold-main);
-        }
-
-        .hero {
+        .hero-portal {
           position: relative;
           min-height: 100vh;
           display: flex;
-          align-items: center;
+          flex-direction: column;
           justify-content: center;
-          padding-top: 5rem;
-          background-color: #07070a;
+          padding-top: 8rem;
           overflow: hidden;
         }
 
-        .hero::before, .hero::after {
-          content: '';
-          position: absolute;
-          width: 150vw;
-          height: 150vh;
-          top: -25vh;
-          left: -25vw;
-          z-index: 0;
-          background: radial-gradient(circle at 50% 50%, rgba(230, 184, 0, 0.15) 0%, transparent 40%),
-                      radial-gradient(circle at 80% 20%, rgba(120, 50, 255, 0.12) 0%, transparent 35%),
-                      radial-gradient(circle at 20% 80%, rgba(0, 200, 255, 0.1) 0%, transparent 35%);
-          animation: aurora 25s ease-in-out infinite alternate;
-          filter: blur(60px);
-        }
-
-        .hero::after {
-          background: radial-gradient(circle at 30% 30%, rgba(255, 50, 120, 0.1) 0%, transparent 40%),
-                      radial-gradient(circle at 70% 80%, rgba(230, 184, 0, 0.12) 0%, transparent 40%);
-          animation: aurora 30s ease-in-out infinite alternate-reverse;
-          opacity: 0.8;
-          mix-blend-mode: screen;
-        }
-
-        @keyframes aurora {
-          0% { transform: rotate(0deg) scale(1); }
-          50% { transform: rotate(180deg) scale(1.1); }
-          100% { transform: rotate(360deg) scale(1); }
-        }
-
-        .hero-overlay {
+        .portal-overlay {
           position: absolute;
           inset: 0;
-          background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"/></svg>');
+          background: 
+            radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.15), transparent 40%),
+            radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.15), transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8), #020205);
           pointer-events: none;
-          z-index: 1;
-        }
-
-        .hero-content {
-          text-align: center;
-          max-width: 800px;
-          position: relative;
-          z-index: 2;
         }
 
         .hero-title {
-          font-size: 4.5rem;
-          line-height: 1.1;
+          font-size: clamp(3rem, 10vw, 6rem);
+          font-weight: 950;
+          letter-spacing: -3px;
+          line-height: 0.9;
           margin-bottom: 1.5rem;
-          letter-spacing: -1px;
-          font-family: var(--font-heading);
-          font-weight: 800;
+        }
+
+        .text-gradient {
+          background: linear-gradient(to right, #6366f1, #a855f7);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
           font-size: 1.25rem;
-          color: var(--color-text-secondary);
-          margin-bottom: 2.5rem;
+          color: rgba(255,255,255,0.5);
           max-width: 600px;
-          margin-inline: auto;
+          margin: 0 auto 5rem;
+          line-height: 1.6;
         }
 
-        .section {
-          padding: 6rem 2rem;
-          text-align: center;
-        }
-
-        .section-title {
-          font-size: 2.5rem;
-          margin-bottom: 2rem;
-        }
-
-        .section-text {
-          font-size: 1.125rem;
-          color: var(--color-text-secondary);
-          max-width: 700px;
+        .portal-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+          max-width: 1200px;
           margin: 0 auto;
         }
 
-        @media (max-width: 768px) {
-          .hero-title { font-size: 3rem; }
-          .hero-subtitle { font-size: 1.1rem; }
-          .hero-actions { display: flex; flex-direction: column; gap: 1rem; }
-          .hero-actions .btn { width: 100%; margin: 0 !important; }
+        .portal-card {
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 3rem 2rem;
+          border-radius: 32px;
+          text-align: center;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          color: #fff;
+          position: relative;
+          backdrop-filter: blur(10px);
+        }
+
+        .portal-card:hover {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.1);
+          transform: translateY(-10px) scale(1.02);
+          box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        .portal-icon {
+          width: 80px;
+          height: 80px;
+          margin: 0 auto 2rem;
+          background: rgba(255,255,255,0.05);
+          border-radius: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #6366f1;
+          transition: all 0.3s ease;
+        }
+
+        .purple-glow { color: #a855f7; }
+        .gold-glow { color: #fbbf24; }
+
+        .portal-card:hover .portal-icon {
+          transform: rotate(10deg);
+          background: #fff;
+          color: #000;
+        }
+
+        .portal-name {
+          font-size: 1.5rem;
+          font-weight: 800;
+          margin-bottom: 1rem;
+        }
+
+        .portal-desc {
+          font-size: 0.95rem;
+          color: rgba(255,255,255,0.4);
+          margin-bottom: 2.5rem;
+          line-height: 1.5;
+        }
+
+        .portal-btn {
+          display: inline-block;
+          padding: 0.8rem 1.6rem;
+          background: rgba(0,0,0,0.4);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 100px;
+          font-size: 0.9rem;
+          font-weight: 700;
+          transition: all 0.3s ease;
+        }
+
+        .portal-card:hover .portal-btn {
+          background: #fff;
+          color: #000;
+          border-color: #fff;
+        }
+
+        .purple-bg { border-color: rgba(168, 85, 247, 0.3); }
+        .border-btn { border-color: rgba(251, 191, 36, 0.3); }
+
+        .stats-bar {
+          margin-top: 8rem;
+          padding: 3rem 0;
+          border-top: 1px solid rgba(255,255,255,0.05);
+          background: rgba(0,0,0,0.2);
+        }
+
+        .stats-flex {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .stat-item {
+          text-align: center;
+        }
+
+        .stat-num {
+          display: block;
+          font-size: 2.5rem;
+          font-weight: 900;
+          color: #fff;
+        }
+
+        .stat-label {
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: rgba(255,255,255,0.4);
+        }
+
+        .animate-slide-up {
+          animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 992px) {
+          .portal-grid { grid-template-columns: 1fr; max-width: 500px; padding: 0 2rem; }
+          .hero-title { font-size: 4rem; }
+          .stats-flex { flex-wrap: wrap; gap: 2rem; justify-content: center; }
         }
       `}</style>
     </div>
