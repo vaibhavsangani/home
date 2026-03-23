@@ -31,10 +31,34 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+
+    // Indian Phone validation (We expect 10 digits now as +91 is a prefix)
+    const phoneRegex = /^\d{10}$/;
+    
+    // Process phone fields to ensure they have the +91 in final data if they only entered 10 digits
+    if (data.phone && phoneRegex.test(data.phone)) {
+      data.phone = '+91' + data.phone;
+    } else if (data.phone && !data.phone.startsWith('+91')) {
+       // Also allow +91 and 10 digits if they somehow bypassed UI
+       if (!(/^\+91\d{10}$/.test(data.phone))) {
+         alert('Please enter a valid 10-digit Indian mobile number');
+         return;
+       }
+    }
+    
+    if (data.whatsapp && phoneRegex.test(data.whatsapp)) {
+      data.whatsapp = '+91' + data.whatsapp;
+    } else if (data.whatsapp && !data.whatsapp.startsWith('+91')) {
+       if (!(/^\+91\d{10}$/.test(data.whatsapp))) {
+         alert('Please enter a valid 10-digit WhatsApp number');
+         return;
+       }
+    }
+
+    setLoading(true);
 
     // Add type and ticketType explicitly as they are props not inputs
     data.type = type;
@@ -81,11 +105,17 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
             <div className="grid-2">
               <div className="form-group">
                 <label>Phone Number*</label>
-                <input type="tel" name="phone" className="input-field" placeholder="+91 ..." required />
+                <div className="phone-input-group">
+                  <span className="phone-prefix">+91</span>
+                  <input type="tel" name="phone" className="input-field phone-field" placeholder="9876543210" maxLength="10" required />
+                </div>
               </div>
               <div className="form-group">
                 <label>WhatsApp Number</label>
-                <input type="tel" name="whatsapp" className="input-field" placeholder="Same as phone?" />
+                <div className="phone-input-group">
+                  <span className="phone-prefix">+91</span>
+                  <input type="tel" name="whatsapp" className="input-field phone-field" placeholder="9876543210" maxLength="10" />
+                </div>
               </div>
             </div>
             <div className="form-group">
@@ -221,7 +251,17 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
           </div>
           <div className="form-group">
             <label>Phone Number</label>
-            <input type="tel" name="phone" className="input-field" placeholder="+1..." required />
+            <div className="phone-input-group">
+              <span className="phone-prefix">+91</span>
+              <input 
+                type="tel" 
+                name="phone" 
+                className="input-field phone-field" 
+                placeholder="9876543210" 
+                maxLength="10"
+                required 
+              />
+            </div>
           </div>
         </>
       ) : (
@@ -255,6 +295,57 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
           padding: 2rem;
           border-radius: 20px;
           margin-bottom: 2rem;
+        }
+
+        .submit-btn {
+          background: linear-gradient(135deg, var(--color-brand-blue), #6b4cff);
+          height: 3.5rem;
+          font-size: 1.1rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4);
+          border: none;
+        }
+
+        .phone-input-group {
+          display: flex;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 12px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+        }
+
+        .phone-input-group:focus-within {
+          border-color: var(--color-brand-blue);
+          box-shadow: 0 0 15px rgba(0, 122, 255, 0.2);
+        }
+
+        .phone-prefix {
+          padding: 0 1rem;
+          color: var(--color-brand-blue);
+          font-weight: 800;
+          font-size: 1.1rem;
+          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.02);
+          height: 100%;
+          display: flex;
+          align-items: center;
+          user-select: none;
+        }
+
+        .phone-field {
+          background: transparent !important;
+          border: none !important;
+          flex: 1;
+          font-size: 1.1rem !important;
+          letter-spacing: 2px;
+          height: 100%;
+        }
+
+        .phone-field:focus {
+          box-shadow: none !important;
         }
 
         .section-title-sm {
