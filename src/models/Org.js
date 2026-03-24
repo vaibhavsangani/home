@@ -13,7 +13,13 @@ const OrgSchema = new mongoose.Schema({
     name: String,
     role: String,
     photo: String
-  }]
+  }],
+  stats: {
+    visitors: { type: String, default: '15k+' },
+    vendors: { type: String, default: '500+' },
+    cities: { type: String, default: '50+' },
+    success: { type: String, default: '98%' }
+  }
 });
 
 export default mongoose.models.Org || mongoose.model('Org', OrgSchema);

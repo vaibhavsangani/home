@@ -15,12 +15,18 @@ export default function Home() {
     const loadStats = async () => {
       const regs = await getRegistrations();
       const vndrs = await getVendors();
-      setStats({
-        visitors: regs.length > 0 ? `${regs.length}+` : '15k+',
-        vendors: vndrs.length > 0 ? `${vndrs.length}+` : '500+',
-        cities: '50+',
-        success: '98%'
-      });
+      const org = await getOrgData();
+      
+      if (org && org.stats) {
+        setStats(org.stats);
+      } else {
+        setStats({
+          visitors: regs.length > 0 ? `${regs.length}+` : '15k+',
+          vendors: vndrs.length > 0 ? `${vndrs.length}+` : '500+',
+          cities: '50+',
+          success: '98%'
+        });
+      }
     };
     loadStats();
   }, []);
@@ -64,50 +70,64 @@ export default function Home() {
         
         <div className="container hero-content">
           <div className="header-text animate-fade-in">
-            <h1 className="hero-title">Unified <span className="text-gradient">Portal</span></h1>
-            <p className="hero-subtitle">The digital gateway to Didaar's elite exhibition ecosystem. Choose your entry point below.</p>
+            <h1 className="hero-title">Didaar <span className="text-gradient">Exhibition</span></h1>
+            <p className="hero-subtitle">Empowering the future of exhibitions through digital excellence. Your gateway to the Didaar ecosystem.</p>
           </div>
 
           <div className="portal-grid">
-            {/* Guest Portal */}
-            <Link href="/guest" className="portal-card guest-card animate-slide-up">
+            <Link href="/guest" className="portal-card animate-slide-up">
               <div className="portal-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               </div>
               <h3 className="portal-name">Visitor Portal</h3>
-              <p className="portal-desc">Register as a guest, explore categories, and get your digital entry pass.</p>
-              <span className="portal-btn">Get Guest Pass →</span>
+              <p className="portal-desc">Register as a guest and secure your digital entry pass.</p>
+              <div className="portal-footer">
+                <span className="btn btn-outline w-full">Get Guest Pass</span>
+              </div>
             </Link>
 
-            {/* Exhibitor Portal */}
-            <Link href="/stall" className="portal-card exhibitor-card animate-slide-up" style={{ animationDelay: '0.1s' }}>
-              <div className="portal-icon purple-glow">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <Link href="/stall" className="portal-card animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <div className="portal-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
               </div>
               <h3 className="portal-name">Exhibitor Portal</h3>
-              <p className="portal-desc">Book your stall, upload documents, and manage your brand's presence.</p>
-              <span className="portal-btn purple-bg">Stall Registration →</span>
+              <p className="portal-desc">Book your stall and manage your brand's presence.</p>
+              <div className="portal-footer">
+                <span className="btn btn-primary w-full">Stall Registration</span>
+              </div>
             </Link>
 
-            {/* Admin Portal */}
-            <Link href="/admin" className="portal-card admin-card animate-slide-up" style={{ animationDelay: '0.2s' }}>
-              <div className="portal-icon gold-glow">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+            <Link href="/admin" className="portal-card animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <div className="portal-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
               </div>
               <h3 className="portal-name">Admin Portal</h3>
-              <p className="portal-desc">Exclusive access for organizers to manage events, vendors, and analytics.</p>
-              <span className="portal-btn border-btn">Staff Login →</span>
+              <p className="portal-desc">Manage events, vendors, and detailed analytics.</p>
+              <div className="portal-footer">
+                <span className="btn btn-outline w-full">Staff Login</span>
+              </div>
             </Link>
           </div>
         </div>
 
-        {/* Dynamic Stats Bar */}
         <div className="stats-bar">
           <div className="container stats-flex">
-            <div className="stat-item"><span className="stat-num">{stats.visitors}</span><span className="stat-label">Visitors</span></div>
-            <div className="stat-item"><span className="stat-num">{stats.vendors}</span><span className="stat-label">Vendors</span></div>
-            <div className="stat-item"><span className="stat-num">{stats.cities}</span><span className="stat-label">Cities</span></div>
-            <div className="stat-item"><span className="stat-num">{stats.success}</span><span className="stat-label">Success</span></div>
+            <div className="stat-item">
+              <span className="stat-num text-gradient">{stats.visitors}</span>
+              <span className="stat-label">Visitors</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-num text-gradient">{stats.vendors}</span>
+              <span className="stat-label">Vendors</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-num text-gradient">{stats.cities}</span>
+              <span className="stat-label">Cities</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-num text-gradient">{stats.success}</span>
+              <span className="stat-label">Success Rate</span>
+            </div>
           </div>
         </div>
       </header>
@@ -121,19 +141,18 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Core Representatives */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', marginBottom: '6rem', maxWidth: '1000px', margin: '0 auto 6rem' }}>
+          <div className="organizers-grid">
             {['owner', 'manager', 'company'].map(role => {
               const data = orgData.coreTeam[role];
               if (!data.name && !data.detail && !data.photo) return null;
               return (
-                <div key={role} className="glass-panel animate-fade-in" style={{ padding: '2rem', borderRadius: '24px', textAlign: 'center', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', position: 'relative' }}>
-                  <div style={{ width: '120px', height: '120px', borderRadius: '50%', margin: '0 auto 1.5rem', border: '3px solid var(--color-brand-green)', padding: '4px', background: '#000', overflow: 'hidden' }}>
-                    <img src={data.photo || 'https://via.placeholder.com/120'} alt={role} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%', filter: 'grayscale(100%)' }} />
+                <div key={role} className="glass-panel organizer-card animate-fade-in">
+                  <div className="organizer-image-wrapper">
+                    <img src={data.photo || 'https://via.placeholder.com/120'} alt={role} className="organizer-photo" />
                   </div>
-                  <h3 style={{ fontSize: '1.2rem', color: 'var(--color-brand-green)', margin: '0 0 0.5rem 0', textTransform: 'uppercase', fontWeight: '800' }}>{data.name || role}</h3>
-                  <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', marginBottom: '1.5rem', fontWeight: '700', letterSpacing: '1px' }}>{role.toUpperCase()}</p>
-                  <p style={{ fontSize: '0.95rem', color: 'var(--color-text-secondary)', lineHeight: '1.6', fontStyle: 'italic' }}>
+                  <h3 className="organizer-name">{data.name || role}</h3>
+                  <p className="organizer-role">{role}</p>
+                  <p className="organizer-detail">
                     "{data.detail || `Dedicated ${role} representation for Didaar Exhibitions.`}"
                   </p>
                 </div>
@@ -295,15 +314,15 @@ export default function Home() {
       <style>{`
         .home-wrapper {
           min-height: 100vh;
-          background: #020205;
-          color: #fff;
-          font-family: 'Inter', system-ui, sans-serif;
+          background: var(--color-bg-dark);
+          color: var(--color-text-primary);
+          font-family: var(--font-body);
         }
 
         .nav-link {
           font-size: 0.9rem;
           font-weight: 600;
-          color: rgba(255,255,255,0.6);
+          color: var(--color-text-secondary);
           transition: all 0.3s ease;
         }
         .nav-link:hover { color: #fff; transform: translateY(-1px); }
@@ -322,32 +341,28 @@ export default function Home() {
           position: absolute;
           inset: 0;
           background: 
-            radial-gradient(circle at 10% 10%, rgba(168, 85, 247, 0.15), transparent 40%),
-            radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.15), transparent 40%),
-            radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8), #020205);
+            radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.1), transparent 40%),
+            radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.1), transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.4), var(--color-bg-dark));
           pointer-events: none;
         }
 
         .hero-title {
-          font-size: clamp(3rem, 10vw, 6rem);
-          font-weight: 950;
-          letter-spacing: -3px;
-          line-height: 0.9;
+          font-size: clamp(3.5rem, 8vw, 5.5rem);
+          font-weight: 900;
+          letter-spacing: -0.04em;
+          line-height: 1.1;
           margin-bottom: 1.5rem;
-        }
-
-        .text-gradient {
-          background: linear-gradient(to right, #6366f1, #a855f7);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          text-align: center;
         }
 
         .hero-subtitle {
           font-size: 1.25rem;
-          color: rgba(255,255,255,0.5);
-          max-width: 600px;
+          color: var(--color-text-secondary);
+          max-width: 700px;
           margin: 0 auto 5rem;
           line-height: 1.6;
+          text-align: center;
         }
 
         .portal-grid {
@@ -359,45 +374,46 @@ export default function Home() {
         }
 
         .portal-card {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 3rem 2rem;
-          border-radius: 32px;
+          background: var(--color-bg-panel);
+          border: 1px solid var(--color-border);
+          padding: 3.5rem 2rem;
+          border-radius: 24px;
           text-align: center;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
           text-decoration: none;
           color: #fff;
           position: relative;
           backdrop-filter: blur(10px);
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         }
 
         .portal-card:hover {
           background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.1);
-          transform: translateY(-10px) scale(1.02);
-          box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+          border-color: rgba(255, 255, 255, 0.2);
+          transform: translateY(-8px);
+          box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
 
         .portal-icon {
-          width: 80px;
-          height: 80px;
-          margin: 0 auto 2rem;
-          background: rgba(255,255,255,0.05);
-          border-radius: 24px;
+          width: 70px;
+          height: 70px;
+          margin: 0 auto 2.5rem;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.05);
+          border-radius: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #6366f1;
-          transition: all 0.3s ease;
+          color: var(--color-brand-blue);
+          transition: all 0.4s ease;
         }
 
-        .purple-glow { color: #a855f7; }
-        .gold-glow { color: #fbbf24; }
-
         .portal-card:hover .portal-icon {
-          transform: rotate(10deg);
-          background: #fff;
-          color: #000;
+          background: var(--color-brand-blue);
+          color: #fff;
+          transform: scale(1.1) rotate(5deg);
         }
 
         .portal-name {
@@ -408,63 +424,112 @@ export default function Home() {
 
         .portal-desc {
           font-size: 0.95rem;
-          color: rgba(255,255,255,0.4);
+          color: var(--color-text-secondary);
           margin-bottom: 2.5rem;
-          line-height: 1.5;
+          line-height: 1.6;
+          flex-grow: 1;
         }
 
-        .portal-btn {
-          display: inline-block;
-          padding: 0.8rem 1.6rem;
-          background: rgba(0,0,0,0.4);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 100px;
-          font-size: 0.9rem;
-          font-weight: 700;
-          transition: all 0.3s ease;
+        .portal-footer {
+          margin-top: auto;
         }
-
-        .portal-card:hover .portal-btn {
-          background: #fff;
-          color: #000;
-          border-color: #fff;
-        }
-
-        .purple-bg { border-color: rgba(168, 85, 247, 0.3); }
-        .border-btn { border-color: rgba(251, 191, 36, 0.3); }
 
         .stats-bar {
-          margin-top: 8rem;
-          padding: 3rem 0;
-          border-top: 1px solid rgba(255,255,255,0.05);
-          background: rgba(0,0,0,0.2);
+          margin-top: 10rem;
+          padding: 4rem 0;
+          border-top: 1px solid var(--color-border);
+          background: rgba(255, 255, 255, 0.01);
         }
 
         .stats-flex {
           display: flex;
           justify-content: space-between;
+          gap: 2rem;
         }
 
         .stat-item {
           text-align: center;
+          flex: 1;
         }
 
         .stat-num {
           display: block;
-          font-size: 2.5rem;
+          font-size: 3rem;
           font-weight: 900;
-          color: #fff;
+          margin-bottom: 0.5rem;
         }
 
         .stat-label {
-          font-size: 0.8rem;
+          font-size: 0.85rem;
           text-transform: uppercase;
-          letter-spacing: 2px;
-          color: rgba(255,255,255,0.4);
+          letter-spacing: 0.1em;
+          color: var(--color-text-secondary);
+          font-weight: 700;
+        }
+
+        /* Organizers Styling */
+        .organizers-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 3rem;
+          margin: 0 auto 6rem;
+          max-width: 1100px;
+        }
+
+        .organizer-card {
+          padding: 3rem 2rem;
+          text-align: center;
+          border-radius: 32px;
+        }
+
+        .organizer-image-wrapper {
+          width: 140px;
+          height: 140px;
+          margin: 0 auto 2rem;
+          padding: 5px;
+          border: 2px solid var(--color-brand-blue);
+          border-radius: 50%;
+          overflow: hidden;
+          background: #000;
+        }
+
+        .organizer-photo {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          transition: all 0.5s ease;
+        }
+
+        .organizer-card:hover .organizer-photo {
+          transform: scale(1.1);
+        }
+
+        .organizer-name {
+          font-size: 1.4rem;
+          font-weight: 800;
+          margin-bottom: 0.5rem;
+          color: #fff;
+        }
+
+        .organizer-role {
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: var(--color-brand-blue);
+          font-weight: 800;
+          margin-bottom: 1.5rem;
+        }
+
+        .organizer-detail {
+          font-size: 1rem;
+          color: var(--color-text-secondary);
+          line-height: 1.6;
+          font-style: italic;
         }
 
         .animate-slide-up {
-          animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+          animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
         }
 
         @keyframes slideUp {
@@ -473,9 +538,10 @@ export default function Home() {
         }
 
         @media (max-width: 992px) {
-          .portal-grid { grid-template-columns: 1fr; max-width: 500px; padding: 0 2rem; }
-          .hero-title { font-size: 4rem; }
-          .stats-flex { flex-wrap: wrap; gap: 2rem; justify-content: center; }
+          .portal-grid { grid-template-columns: 1fr; max-width: 450px; padding: 0 1.5rem; }
+          .hero-title { font-size: 3rem; }
+          .stats-flex { flex-wrap: wrap; gap: 3rem; justify-content: center; }
+          .stat-item { min-width: 150px; }
         }
       `}</style>
     </div>

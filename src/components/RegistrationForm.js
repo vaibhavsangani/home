@@ -29,11 +29,55 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
     setCities(stateData[state] || []);
   };
 
-  const handleSubmit = (e) => {
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      if (!file || !(file instanceof File)) {
+        resolve(null);
+        return;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+
+    // Process all file inputs to Base64
+    const fileFields = ['aadharCard', 'panCard', 'gstPdf'];
+    for (const field of fileFields) {
+      if (data[field] && data[field].size > 0) {
+        try {
+          data[field] = await fileToBase64(data[field]);
+        } catch (err) {
+          console.error(`Error converting ${field}:`, err);
+          data[field] = null;
+        }
+      } else {
+        data[field] = null;
+      }
+    }
+
+    // Handle multiple product photos
+    const productPhotosFiles = formData.getAll('productPhotos');
+    const productPhotosBase64 = [];
+    for (const file of productPhotosFiles) {
+      if (file && file.size > 0) {
+        try {
+          const b64 = await fileToBase64(file);
+          if (b64) productPhotosBase64.push(b64);
+        } catch (err) {
+          console.error('Error converting product photo:', err);
+        }
+      }
+    }
+    data.productPhotos = productPhotosBase64;
 
     // Indian Phone validation (We expect 10 digits now as +91 is a prefix)
     const phoneRegex = /^\d{10}$/;
@@ -57,12 +101,6 @@ export default function RegistrationForm({ type, ticketType, onComplete }) {
          return;
        }
     }
-
-    setLoading(true);
-
-    // Add type and ticketType explicitly as they are props not inputs
-    data.type = type;
-    data.ticketType = ticketType;
 
     // Simulate API call / Payment gateway processing
     setTimeout(() => {

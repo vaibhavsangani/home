@@ -16,10 +16,10 @@ export default function RegisterPage({ searchParams }) {
       data.name = 'Invited Guest';
     }
     const saved = await saveRegistration(data);
-    if (saved && saved.id) {
+    if (saved && !saved.error) {
       router.push(`/ticket/${saved.id}`);
     } else {
-      alert("Registration Failed! Please make sure your MongoDB password in .env.local is correct and the database is accessible.");
+      alert(saved?.error || "Registration Failed! Please verify your database connection.");
     }
   };
 

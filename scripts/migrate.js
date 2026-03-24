@@ -56,7 +56,25 @@ async function migrate() {
       const regs = JSON.parse(fs.readFileSync(regPath, 'utf8'));
       console.log(`Migrating ${regs.length} registrations...`);
       for (const reg of regs) {
-        await Registration.findOneAndUpdate({ id: reg.id }, reg, { upsert: true });
+        if (reg.role === 'vendor' || reg.type === 'stall') {
+          console.log(`  Migrating vendor: ${reg.companyName || reg.name}`);
+          // Map to Vendor schema
+          const vendorData = {
+            id: reg.id,
+            companyName: reg.companyName || 'Unknown',
+            name: reg.name,
+            email: reg.email,
+            phone: reg.phone,
+            status: reg.status || 'confirmed',
+            date: reg.date,
+            businessCategory: reg.category,
+            stallSize: reg.stallSize,
+            timestamp: reg.timestamp || Date.now()
+          };
+          await Vendor.findOneAndUpdate({ id: reg.id }, vendorData, { upsert: true });
+        } else {
+          await Registration.findOneAndUpdate({ id: reg.id }, reg, { upsert: true });
+        }
       }
     }
 

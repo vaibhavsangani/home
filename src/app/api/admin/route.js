@@ -13,7 +13,7 @@ export async function GET() {
     return NextResponse.json(admin);
   } catch (error) {
     console.error('Admin GET Error:', error);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed' }, { status: 500 });
   }
 }
 
@@ -26,6 +26,6 @@ export async function POST(request) {
     return NextResponse.json({ success: true, admin });
   } catch (error) {
     console.error('Admin POST Error:', error);
-    return NextResponse.json({ error: 'Failed to update credentials' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to update credentials' }, { status: 500 });
   }
 }

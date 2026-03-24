@@ -5,14 +5,8 @@ export const getEvents = async () => {
       if (!res.ok) throw new Error('Failed to fetch events');
       return await res.json();
     } catch(err) {
-      return [{ 
-        id: "1",
-        name: "Didaar Exhibition", 
-        venue: "Grand Expo Hall", 
-        city: "Mumbai", 
-        startDate: "2026-10-15", 
-        endDate: "2026-10-18" 
-      }];
+      console.error('getEvents Error:', err);
+      return [];
     }
 };
 

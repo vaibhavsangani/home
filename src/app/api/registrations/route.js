@@ -9,7 +9,7 @@ export async function GET(request) {
     return NextResponse.json(registrations);
   } catch (err) {
     console.error('Registration GET Error:', err);
-    return NextResponse.json({ error: 'Failed to fetch registrations' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to fetch registrations' }, { status: 500 });
   }
 }
 
@@ -21,7 +21,7 @@ export async function POST(request) {
     return NextResponse.json(newRegistration);
   } catch (err) {
     console.error('Registration POST Error:', err);
-    return NextResponse.json({ error: 'Failed to create registration' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to create registration' }, { status: 500 });
   }
 }
 
@@ -42,7 +42,7 @@ export async function PUT(request) {
     return NextResponse.json({ success: true, data: registration });
   } catch (err) {
     console.error('Registration PUT Error:', err);
-    return NextResponse.json({ error: 'Failed to update registration' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to update registration' }, { status: 500 });
   }
 }
 
@@ -59,6 +59,6 @@ export async function DELETE(request) {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('Registration DELETE Error:', err);
-    return NextResponse.json({ error: 'Failed to delete registration' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to delete registration' }, { status: 500 });
   }
 }

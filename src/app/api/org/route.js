@@ -15,13 +15,19 @@ export async function GET() {
           manager: { name: '', detail: '', photo: '' },
           company: { name: '', detail: '', photo: '' }
         },
-        additionalMembers: []
+        additionalMembers: [],
+        stats: {
+          visitors: '15k+',
+          vendors: '500+',
+          cities: '50+',
+          success: '98%'
+        }
       };
     }
     return NextResponse.json(data);
   } catch (error) {
     console.error('Org GET Error:', error);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed' }, { status: 500 });
   }
 }
 
@@ -33,6 +39,6 @@ export async function POST(request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Org POST Error:', error);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed' }, { status: 500 });
   }
 }

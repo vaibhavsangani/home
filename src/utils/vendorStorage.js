@@ -17,7 +17,7 @@ export const saveVendor = async (vendorData) => {
     id,
     ...vendorData,
     date: new Date().toLocaleDateString(),
-    status: 'pending' // Vendors usually start pending
+    status: 'pending'
   };
   
   try {
@@ -27,15 +27,16 @@ export const saveVendor = async (vendorData) => {
       body: JSON.stringify(newVendor)
     });
     
+    const result = await res.json();
     if (!res.ok) {
-      console.error('API Error Response:', await res.text());
-      return null;
+      console.error('API Error Response:', result);
+      return { error: result.error || 'Failed to save vendor' };
     }
     
-    return await res.json();
+    return result;
   } catch (err) {
     console.error(err);
-    return null;
+    return { error: 'Network error or database connection failed.' };
   }
 };
 

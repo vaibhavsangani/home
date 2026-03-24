@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -95,34 +95,22 @@ export default function AdminDashboard() {
   const handleSaveEvent = async () => {
     setSavingEvent(true);
     let success = false;
-    let errorMsg = 'Failed to save event. Please check your network connection and database configuration.';
-    
-    try {
-      if (editingEvent) {
-        success = await updateEventDetails(eventForm);
-      } else {
-        const res = await addEvent(eventForm);
-        if (res && res.error) {
-          errorMsg = `Error: ${res.error}`;
-          success = false;
-        } else {
-          success = !!res;
-        }
-      }
-      
-      if (success) {
-        const updatedEvents = await getEvents();
-        setEvents(updatedEvents);
-        setIsEventModalOpen(false);
-        alert(editingEvent ? 'Event updated!' : 'Event published successfully!');
-      } else {
-        alert(errorMsg);
-      }
-    } catch (err) {
-      alert('A critical error occurred while saving. Please ensure MONGODB_URI is set correctly in Vercel.');
-    } finally {
-      setSavingEvent(false);
+    if (editingEvent) {
+      success = await updateEventDetails(eventForm);
+    } else {
+      const res = await addEvent(eventForm);
+      success = !!res && !res.error;
     }
+    
+    if (success) {
+      const updatedEvents = await getEvents();
+      setEvents(updatedEvents);
+      setIsEventModalOpen(false);
+      alert(editingEvent ? 'Event updated!' : 'Event published successfully!');
+    } else {
+      alert('Failed to save event. Please check your data and try again.');
+    }
+    setSavingEvent(false);
   };
 
   const handleUpdateCore = (role, field, value) => {
@@ -324,7 +312,7 @@ export default function AdminDashboard() {
           </button>
 
           <Link href="/" style={{ display: 'block', textAlign: 'center', margin: '1.5rem 0', color: 'rgba(255,255,255,0.3)', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '600' }}>
-            ← Back to Main Site
+            â† Back to Main Site
           </Link>
         </form>
         <style>{`
@@ -355,11 +343,11 @@ export default function AdminDashboard() {
         {isForgotModalOpen && (
           <div className="modal-overlay animate-fade-in" style={{ zIndex: 10000 }}>
             <div className="modal-content" style={{ maxWidth: '400px', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🔑</div>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>ðŸ”‘</div>
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-gold-main)' }}>Credential Recovery</h3>
               <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: '2rem', lineHeight: '1.6' }}>
-                For security, admin credentials are managed in the <strong>MongoDB database</strong>. 
-                If you have lost access, you can update the <code>admins</code> collection in your Atlas dashboard or check your <code>.env.local</code> file for connection details.
+                For security, password resets are handled via your local system files. 
+                Please check the <strong>data/admin.json</strong> file in your project directory to view or update your credentials.
               </p>
               <button 
                 className="btn btn-primary w-full" 
@@ -387,7 +375,7 @@ export default function AdminDashboard() {
           <li className={`nav-item ${activeTab === 'security' ? 'active' : ''}`} onClick={() => setActiveTab('security')}>Security Access</li>
           <li className="nav-item" onClick={handleLogout}>Logout</li>
         </ul>
-        <Link href="/" className="exit-link">← Return to Site</Link>
+        <Link href="/" className="exit-link">â† Return to Site</Link>
       </nav>
 
       <main className="admin-main">
@@ -607,7 +595,7 @@ export default function AdminDashboard() {
                       <h4 style={{ color: 'var(--color-gold-main)', textTransform: 'capitalize', marginBottom: '1.5rem', textAlign: 'center' }}>{role} Option</h4>
                       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
                         <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', overflow: 'hidden', margin: '0 auto 0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {orgData.coreTeam[role].photo ? <img src={orgData.coreTeam[role].photo} alt={role} style={{width:'100%', height:'100%', objectFit:'cover'}} /> : <span>👤</span>}
+                          {orgData.coreTeam[role].photo ? <img src={orgData.coreTeam[role].photo} alt={role} style={{width:'100%', height:'100%', objectFit:'cover'}} /> : <span>ðŸ‘¤</span>}
                         </div>
                         <input type="file" id={`core-photo-${role}`} style={{display:'none'}} accept="image/*" onChange={e => handleCorePhotoUpload(e, role)} />
                         <label htmlFor={`core-photo-${role}`} className="action-btn edit-btn" style={{cursor:'pointer', fontSize:'0.7rem', padding:'0.3rem 0.7rem'}}>Update Photo</label>
@@ -634,7 +622,7 @@ export default function AdminDashboard() {
                     <div key={member.id} className="glass-panel" style={{ padding: '1rem 1.5rem', borderRadius: '12px', display: 'grid', gridTemplateColumns: '60px 1fr 1fr 100px', gap: '1.5rem', alignItems: 'center', background: 'rgba(255,255,255,0.02)' }}>
                       <div style={{ position: 'relative' }}>
                         <div style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {member.photo ? <img src={member.photo} alt="Team" style={{width:'100%', height:'100%', objectFit:'cover'}} /> : <span>👤</span>}
+                          {member.photo ? <img src={member.photo} alt="Team" style={{width:'100%', height:'100%', objectFit:'cover'}} /> : <span>ðŸ‘¤</span>}
                         </div>
                         <input type="file" id={`member-photo-${member.id}`} style={{display:'none'}} accept="image/*" onChange={e => handleMemberPhotoUpload(e, member.id)} />
                         <label htmlFor={`member-photo-${member.id}`} style={{position:'absolute', bottom:0, right:0, cursor:'pointer', background:'var(--color-gold-main)', color:'#000', width:'18px', height:'18px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'12px'}}>+</label>
@@ -676,7 +664,7 @@ export default function AdminDashboard() {
                   
                   <div style={{ background: 'rgba(0,0,0,0.3)', padding: '0.75rem', borderRadius: '8px', marginBottom: '1.5rem' }}>
                     <p className="text-secondary" style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span>📅</span> {new Date(ev.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})} - {new Date(ev.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})}
+                      <span>ðŸ“…</span> {new Date(ev.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})} - {new Date(ev.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric'})}
                     </p>
                   </div>
 
@@ -754,7 +742,7 @@ export default function AdminDashboard() {
                    </button>
                    
                    <p style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.8rem', color: 'rgba(255,255,255,0.3)', fontWeight: '600' }}>
-                     🔒 Your credentials are saved locally in the system database.
+                     ðŸ”’ Your credentials are saved locally in the system database.
                    </p>
                 </form>
              </div>

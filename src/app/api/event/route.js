@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json(events);
   } catch (err) {
     console.error('Event GET Error:', err);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to fetch events' }, { status: 500 });
   }
 }
 
@@ -24,7 +24,7 @@ export async function POST(request) {
     return NextResponse.json(event);
   } catch (err) {
     console.error('Event POST Error:', err);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to create event' }, { status: 500 });
   }
 }
 
@@ -44,7 +44,7 @@ export async function PUT(request) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   } catch (err) {
     console.error('Event PUT Error:', err);
-    return NextResponse.json({ error: 'Failed' }, { status: 500 });
+    return NextResponse.json({ error: err.message || 'Failed to update event' }, { status: 500 });
   }
 }
 
@@ -61,6 +61,6 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     } catch (err) {
       console.error('Event DELETE Error:', err);
-      return NextResponse.json({ error: 'Failed' }, { status: 500 });
+      return NextResponse.json({ error: err.message || 'Failed to delete event' }, { status: 500 });
     }
 }

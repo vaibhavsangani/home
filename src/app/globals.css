@@ -1,20 +1,35 @@
 :root {
-  --color-bg-dark: #050505;
-  --color-bg-panel: rgba(255, 255, 255, 0.02);
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-text-primary: #ffffff;
-  --color-text-secondary: rgba(255, 255, 255, 0.5);
-  --color-brand-green: #00EA87;
-  --color-brand-blue: #007AFF;
-  --color-brand-blue-glow: rgba(0, 122, 255, 0.3);
-  --color-brand-green-glow: rgba(0, 234, 135, 0.3);
+  --color-bg-dark: #0a0a0c;
+  --color-bg-panel: rgba(255, 255, 255, 0.03);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-brand-purple: #8b5cf6;
+  --color-brand-blue: #3b82f6;
+  --color-brand-purple-glow: rgba(139, 92, 246, 0.3);
+  --color-brand-blue-glow: rgba(59, 130, 246, 0.3);
   --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 
   /* Glassmorphism Refined */
-  --glass-bg: rgba(255, 255, 255, 0.015);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-blur: blur(25px);
+  --glass-bg: rgba(255, 255, 255, 0.02);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-blur: blur(20px);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 * {
@@ -84,15 +99,27 @@ a {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.text-gold {
-  color: var(--color-brand-green);
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.text-secondary {
-  color: var(--color-text-secondary);
+.text-gradient {
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-brand {
+  background: linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Buttons System */
@@ -100,90 +127,57 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 2.2rem;
-  border-radius: 14px;
-  font-weight: 800;
-  font-size: 1.05rem;
+  padding: 0.9rem 2rem;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  border: none;
+  border: 1px solid transparent;
   font-family: var(--font-heading);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .btn-primary {
-  background: var(--color-brand-blue);
-  color: #ffffff;
-  box-shadow: 0 10px 30px var(--color-brand-blue-glow);
+  background: #fff;
+  color: #000;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
 }
 
 .btn-primary:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 15px 40px rgba(0, 122, 255, 0.5);
-  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 255, 255, 0.2);
 }
 
 .btn-outline {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
 }
 
 /* Inputs System */
 .input-field {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
-  padding: 1.1rem 1.4rem;
-  border-radius: 14px;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
   width: 100%;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  font-size: 1.05rem;
+  transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
 .input-field:focus {
   outline: none;
   border-color: var(--color-brand-blue);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: 0 0 25px rgba(0, 122, 255, 0.2);
-}
-
-/* Form Groups */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.75rem;
-  font-size: 0.85rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* Custom Select Dropdown */
-.custom-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23007AFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1.25rem center;
-  background-size: 1.1rem;
-  padding-right: 3.5rem;
-}
-
-.custom-select option {
-  background-color: #0c0c0c;
-  color: white;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
 /* Spacing Helpers */
