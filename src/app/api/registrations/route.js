@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Registration from '@/models/Registration';
+import Event from '@/models/Event';
+import { sendTicketEmail } from '@/lib/mail';
 
 export async function GET(request) {
   try {
@@ -18,6 +20,18 @@ export async function POST(request) {
     await dbConnect();
     const data = await request.json();
     const newRegistration = await Registration.create(data);
+    
+    // Attempt to send email confirmation
+    try {
+      const event = await Event.findOne({ id: data.eventId }) || await Event.findOne({});
+      if (event) {
+        await sendTicketEmail(newRegistration, event);
+      }
+    } catch (mailErr) {
+      console.error('Mail Sending Error:', mailErr);
+      // We don't want to fail the registration if only the email fails
+    }
+
     return NextResponse.json(newRegistration);
   } catch (err) {
     console.error('Registration POST Error:', err);

@@ -384,6 +384,7 @@ export default function AdminDashboard() {
           <li className={`nav-item ${activeTab === 'vendors' ? 'active' : ''}`} onClick={() => setActiveTab('vendors')}>Stall Vendors</li>
           <li className={`nav-item ${activeTab === 'team' ? 'active' : ''}`} onClick={() => setActiveTab('team')}>Team & Org</li>
           <li className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>Manage Events</li>
+          <li className={`nav-item ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}>Analytics</li>
           <li className={`nav-item ${activeTab === 'security' ? 'active' : ''}`} onClick={() => setActiveTab('security')}>Security Access</li>
           <li className="nav-item">
             <Link href="/admin/check-in" style={{ color: 'inherit', textDecoration: 'none', display: 'block', width: '100%' }}>
@@ -400,9 +401,10 @@ export default function AdminDashboard() {
           <h1 className="admin-title">
             {activeTab === 'registrations' ? 'Guest Overview' : 
              activeTab === 'vendors' ? 'Stall Vendor Applications' : 
-             activeTab === 'team' ? 'Team & Organization' : 
-             activeTab === 'settings' ? 'Manage Exhibitions' :
-             'System Security'}
+              activeTab === 'team' ? 'Team & Organization' : 
+              activeTab === 'settings' ? 'Manage Exhibitions' :
+              activeTab === 'analytics' ? 'Event Analytics' :
+              'System Security'}
           </h1>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             {activeTab === 'registrations' && (

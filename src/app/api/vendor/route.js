@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Vendor from '@/models/Vendor';
+import { sendVendorConfirmation } from '@/lib/mail';
 
 export async function GET(request) {
   try {
@@ -21,6 +22,14 @@ export async function POST(request) {
     // Data is now sent as Base64 strings from the frontend
     console.log('Received Vendor Data (keys):', Object.keys(data));
     const newVendor = await Vendor.create(data);
+    
+    // Attempt to send vendor confirmation email
+    try {
+      await sendVendorConfirmation(newVendor);
+    } catch (mailErr) {
+      console.error('Vendor Mail Error:', mailErr);
+    }
+
     return NextResponse.json(newVendor);
   } catch (err) {
     console.error('Vendor POST Error:', err);
