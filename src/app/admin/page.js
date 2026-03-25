@@ -385,6 +385,11 @@ export default function AdminDashboard() {
           <li className={`nav-item ${activeTab === 'team' ? 'active' : ''}`} onClick={() => setActiveTab('team')}>Team & Org</li>
           <li className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>Manage Events</li>
           <li className={`nav-item ${activeTab === 'security' ? 'active' : ''}`} onClick={() => setActiveTab('security')}>Security Access</li>
+          <li className="nav-item">
+            <Link href="/admin/check-in" style={{ color: 'inherit', textDecoration: 'none', display: 'block', width: '100%' }}>
+              Check-in Portal <span style={{ float: 'right', fontSize: '0.7rem', background: 'var(--color-brand-green)', color: '#000', padding: '1px 6px', borderRadius: '4px' }}>NEW</span>
+            </Link>
+          </li>
           <li className="nav-item" onClick={handleLogout}>Logout</li>
         </ul>
         <Link href="/" className="exit-link">← Return to Site</Link>
@@ -399,7 +404,14 @@ export default function AdminDashboard() {
              activeTab === 'settings' ? 'Manage Exhibitions' :
              'System Security'}
           </h1>
-          <div className="admin-profile">Admin Online</div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {activeTab === 'registrations' && (
+              <Link href="/admin/check-in" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', background: 'var(--color-brand-green)', color: '#000' }}>
+                Launch QR Scanner
+              </Link>
+            )}
+            <div className="admin-profile">Admin Online</div>
+          </div>
         </header>
 
         {activeTab === 'registrations' && (

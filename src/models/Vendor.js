@@ -29,6 +29,8 @@ const VendorSchema = new mongoose.Schema({
   facebookId: { type: String },
   instagramId: { type: String },
   status: { type: String, enum: ['pending', 'verified', 'confirmed'], default: 'pending' },
+  checkedIn: { type: Boolean, default: false },
+  checkInTime: { type: Date },
   date: { type: String, required: true },
   timestamp: { type: Number, default: Date.now }
 });

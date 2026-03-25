@@ -8,6 +8,8 @@ const RegistrationSchema = new mongoose.Schema({
   type: { type: String, enum: ['new', 'invited', 'stall'], default: 'new' },
   status: { type: String, enum: ['pending', 'verified', 'confirmed'], default: 'pending' },
   ticketType: { type: String, enum: ['free', 'paid'], default: 'free' },
+  checkedIn: { type: Boolean, default: false },
+  checkInTime: { type: Date },
   date: { type: String, required: true },
   timestamp: { type: Number, default: Date.now }
 });
