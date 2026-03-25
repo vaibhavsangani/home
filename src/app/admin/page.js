@@ -34,12 +34,16 @@ export default function AdminDashboard() {
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginForm, setLoginForm] = useState({ id: '', password: '' });
-  const [adminCredentials, setAdminCredentials] = useState({ adminId: 'vaibhav', adminPassword: '123456789' });
-  const [securityForm, setSecurityForm] = useState({ adminId: '', adminPassword: '' });
+  const [adminCredentials, setAdminCredentials] = useState({ adminId: 'vaibhav', adminPassword: '123456789', adminEmail: '' });
+  const [securityForm, setSecurityForm] = useState({ adminId: '', adminPassword: '', adminEmail: '' });
   const [error, setError] = useState('');
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showSecurityPassword, setShowSecurityPassword] = useState(false);
+  const [useOtp, setUseOtp] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
 
   // Reg Edit state
   const [editingReg, setEditingReg] = useState(null);
@@ -86,6 +90,57 @@ export default function AdminDashboard() {
   const handleGoogleLogin = () => {
     alert('Direct Google Login is currently in demonstration mode. Integration with Google Cloud Console is required for production.');
   };
+
+  const handleRequestOtp = async () => {
+    if (!loginForm.id) {
+       setError('Please enter your Admin ID first');
+       return;
+    }
+    setIsSendingOtp(true);
+    setError('');
+    try {
+        const res = await fetch('/api/admin/otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ adminId: loginForm.id })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setOtpSent(true);
+            alert('A 6-digit login code has been sent to your registered email.');
+        } else {
+            setError(data.error);
+        }
+    } catch (err) {
+        setError('Network error. Check connection.');
+    } finally {
+        setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    setIsSendingOtp(true);
+    try {
+        const res = await fetch('/api/admin/otp', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ adminId: loginForm.id, otp: otpCode })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            setIsAuthenticated(true);
+            sessionStorage.setItem('adminAuth', 'true');
+            setError('');
+        } else {
+            setError(data.error);
+        }
+    } catch (err) {
+        setError('Network error during verification.');
+    } finally {
+        setIsSendingOtp(false);
+    }
+  }
 
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -265,6 +320,23 @@ export default function AdminDashboard() {
           <div className="logo mb-8 text-center" style={{ color: 'var(--color-brand-green)', fontWeight: '900' }}>Didaar Exhibition</div>
           <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#fff' }}>Admin Portal</h2>
           {error && <p style={{ color: '#ff4444', textAlign: 'center', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</p>}
+          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '0.25rem' }}>
+            <button 
+                type="button" 
+                onClick={() => { setUseOtp(false); setOtpSent(false); }}
+                style={{ flex: 1, padding: '0.6rem', border: 'none', borderRadius: '10px', background: !useOtp ? 'var(--color-brand-blue)' : 'transparent', color: '#fff', fontSize: '0.8rem', fontWeight: '800', cursor: 'pointer', transition: '0.3s' }}
+            >
+                Password
+            </button>
+            <button 
+                type="button" 
+                onClick={() => setUseOtp(true)}
+                style={{ flex: 1, padding: '0.6rem', border: 'none', borderRadius: '10px', background: useOtp ? 'var(--color-brand-blue)' : 'transparent', color: '#fff', fontSize: '0.8rem', fontWeight: '800', cursor: 'pointer', transition: '0.3s' }}
+            >
+                Email OTP
+            </button>
+          </div>
+
           <div className="form-group mt-4">
             <label>Admin ID</label>
             <input 
@@ -276,31 +348,69 @@ export default function AdminDashboard() {
               required 
             />
           </div>
-          <div className="form-group">
-            <label>Password</label>
-            <div style={{ position: 'relative' }}>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                value={loginForm.password} 
-                onChange={e => setLoginForm({...loginForm, password: e.target.value})} 
-                className="input-field" 
-                placeholder="Enter password..." 
-                style={{ paddingRight: '3rem' }}
-                required 
-              />
-              <button 
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              >
-                {showPassword ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
-                )}
-              </button>
+
+          {!useOtp ? (
+            <div className="form-group">
+              <label>Password</label>
+              <div style={{ position: 'relative' }}>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  value={loginForm.password} 
+                  onChange={e => setLoginForm({...loginForm, password: e.target.value})} 
+                  className="input-field" 
+                  placeholder="Enter password..." 
+                  style={{ paddingRight: '3rem' }}
+                  required 
+                />
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                >
+                  {showPassword ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+                  )}
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="form-group animate-fade-in">
+              <label>Security Code (OTP)</label>
+              {!otpSent ? (
+                <button 
+                    type="button" 
+                    onClick={handleRequestOtp} 
+                    disabled={isSendingOtp}
+                    className="btn btn-primary w-full" 
+                    style={{ background: 'var(--color-brand-green)', color: '#000', fontWeight: '800' }}
+                >
+                    {isSendingOtp ? 'Sending...' : 'Send Login Code to Email'}
+                </button>
+              ) : (
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <input 
+                        type="text" 
+                        value={otpCode}
+                        onChange={e => setOtpCode(e.target.value)}
+                        placeholder="6-digit code"
+                        className="input-field"
+                        maxLength="6"
+                        style={{ textAlign: 'center', fontSize: '1.2rem', letterSpacing: '4px' }}
+                    />
+                    <button 
+                        type="button" 
+                        onClick={handleVerifyOtp}
+                        className="btn btn-primary"
+                        style={{ padding: '0 1rem' }}
+                    >
+                        Verify
+                    </button>
+                </div>
+              )}
+            </div>
+          )}
           <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
             <button 
               type="button" 
@@ -725,17 +835,28 @@ export default function AdminDashboard() {
                 </div>
 
                 <form onSubmit={handleUpdateSecurity}>
-                   <div className="form-group" style={{ marginBottom: '2rem' }}>
-                      <label style={{ display: 'block', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin User ID</label>
-                      <input 
-                        type="text" 
-                        className="input-field" 
-                        value={securityForm.adminId} 
-                        onChange={e => setSecurityForm({...securityForm, adminId: e.target.value})} 
-                        placeholder="Set new Admin ID..."
-                        required 
-                      />
-                   </div>
+                    <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                       <label style={{ display: 'block', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Admin User ID</label>
+                       <input 
+                         type="text" 
+                         className="input-field" 
+                         value={securityForm.adminId} 
+                         onChange={e => setSecurityForm({...securityForm, adminId: e.target.value})} 
+                         placeholder="Set new Admin ID..."
+                         required 
+                       />
+                    </div>
+
+                    <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+                       <label style={{ display: 'block', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Recovery Email (for Free OTP Login)</label>
+                       <input 
+                         type="email" 
+                         className="input-field" 
+                         value={securityForm.adminEmail || ''} 
+                         onChange={e => setSecurityForm({...securityForm, adminEmail: e.target.value})} 
+                         placeholder="your-email@gmail.com"
+                       />
+                    </div>
 
                    <div className="form-group" style={{ marginBottom: '3rem' }}>
                       <label style={{ display: 'block', marginBottom: '0.75rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>New Admin Password</label>
